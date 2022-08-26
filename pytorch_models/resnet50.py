@@ -4,8 +4,8 @@ from tqdm import tqdm
 import torch.nn as nn
 from torch.optim import Adam
 
-from tools import args, helper
-import dataloader
+from .tools import args, helper
+from . import dataloader
 
 class ResNet50:
   def __init__(self, dataloader, device, verbose=False):

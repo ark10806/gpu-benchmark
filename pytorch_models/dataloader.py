@@ -1,5 +1,5 @@
 import torch
-from dataset import Dataset
+from .dataset import Dataset
 
 def load_data(dataset, batch_size, num_workers):
   dataset = Dataset().load(dataset)
