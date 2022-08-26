@@ -13,11 +13,8 @@ class ResNet50:
     self.dataloader = dataloader
     self.device = device
     self.init_model()
-    if (1 < n_gpu <= torch.cuda.device_count() or n_gpu==-1) and self.device=='cuda':
-      if n_gpu == -1:
-        n_gpu = torch.cuda.device_count()
+    if (1 < n_gpu <= torch.cuda.device_count()) and self.device=='cuda':
       self.model = nn.DataParallel(self.model, device_ids=list(range(n_gpu)))
-    print(f'using gpu {list(range(n_gpu))} {torch.cuda.get_device_name(0)}')
 
   def statistics(func):
     def wrapper(self):
@@ -29,7 +26,6 @@ class ResNet50:
     self.loss_fn = nn.CrossEntropyLoss()
     self.model = timm.create_model('resnet50', pretrained=True, in_chans=1, num_classes=10).to(self.device)
     self.optim = Adam(self.model.parameters(), lr=1e-4)
-    print(self.device)
 
   def train(self, epochs):
     train_tps = []
