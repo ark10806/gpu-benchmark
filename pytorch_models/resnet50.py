@@ -12,9 +12,7 @@ class ResNet50:
     self.v = verbose
     self.dataloader = dataloader
     self.device = device
-    self.loss_fn = nn.CrossEntropyLoss()
     self.init_model()
-    self.optim = Adam(self.model.parameters(), lr=1e-4)
 
   def statistics(func):
     def wrapper(self):
@@ -23,7 +21,10 @@ class ResNet50:
     return wrapper
 
   def init_model(self):
+    self.loss_fn = nn.CrossEntropyLoss()
     self.model = timm.create_model('resnet50', pretrained=True, in_chans=1, num_classes=10).to(self.device)
+    self.optim = Adam(self.model.parameters(), lr=1e-4)
+    print(self.device)
 
   def train(self, epochs):
     train_tps = []
@@ -72,5 +73,4 @@ if __name__ == '__main__':
   opt = args.init()
   device = 'cuda' if torch.cuda.is_available() else 'cpu'
   model = ResNet50(dataloader.load_data('mnist', batch_size=opt.batch_size, num_workers=opt.n_workers), device, verbose=True)
-  print(device)
-  model.train(epochs=10)
+  print(model.train(epochs=10))
