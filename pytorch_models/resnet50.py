@@ -8,11 +8,14 @@ from .tools import args, helper
 from . import dataloader
 
 class ResNet50:
-  def __init__(self, dataloader, device, verbose=False):
+  def __init__(self, dataloader, device, n_gpu=1, verbose=False):
     self.v = verbose
     self.dataloader = dataloader
     self.device = device
     self.init_model()
+    if (1 < n_gpu <= torch.cuda.device_count()) and self.device=='cuda':
+      print(f'using gpu {list(range(n_gpu))}')
+      self.model = nn.DataParallel(self.model, device_ids=list(range(n_gpu)))
 
   def statistics(func):
     def wrapper(self):
