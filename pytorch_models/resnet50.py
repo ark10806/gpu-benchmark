@@ -30,7 +30,7 @@ class ResNet50:
     train_tps = []
     valid_tps = []
     for epoch in range(epochs):
-      if self.v: print(f'{"[epoch " + str(epoch)+"]":-^100}')
+      if self.v: print(f'{"[epoch " + str(epoch+1)+"]":-^100}')
       self.train_one_epoch()
       train_tps.append(self.tps.eval())
       self.eval()
