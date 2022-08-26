@@ -22,6 +22,7 @@ for batch_size in batch_list:
   tps_res = model.train(epochs=opt.epochs)
   output.append( (batch_size, tps_res['train']) )
 
+print(torch.cuda.get_device_name(0))
 print(f'{"batch_size":<10}\t TPS')
 for batch_size, tps in output:
   print(f'{batch_size:<10}:\t {tps}')
