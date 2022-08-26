@@ -50,7 +50,7 @@ class ResNet50:
   @statistics
   def eval(self):
     with torch.no_grad():
-      pbar = tqdm(self.dataloader['valid'], desc='eval')
+      pbar = tqdm(self.dataloader['valid'], desc='eval ')
       for image, label in pbar:
         self.tps.append(len(label))
         image = image.to(self.device)
@@ -60,7 +60,7 @@ class ResNet50:
         loss = self.loss_fn(pred, label)
         correct = torch.argmax(pred, 1) == label
         pbar.set_postfix({'tps': self.tps.eval()})
-      print(f'val: {torch.sum(correct)/len(correct)*100:.2f}%, {loss:.4f}')
+      print(f'acc: {torch.sum(correct)/len(correct)*100:.2f}%\t loss: {loss:.4f}')
 
 if __name__ == '__main__':
   opt = args.init()
