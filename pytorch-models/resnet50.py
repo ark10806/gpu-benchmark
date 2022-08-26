@@ -4,9 +4,8 @@ from tqdm import tqdm
 import torch.nn as nn
 from torch.optim import Adam
 
-import init
+from tools import args, helper
 import dataloader
-from helper import TPS
 
 class ResNet50:
   def __init__(self, dataloader, device):
@@ -18,7 +17,7 @@ class ResNet50:
 
   def statistics(func):
     def wrapper(self):
-      self.tps = TPS()
+      self.tps = helper.TPS()
       func( self )
     return wrapper
 
@@ -27,9 +26,10 @@ class ResNet50:
 
   def train(self, epochs):
     for epoch in range(epochs):
-      print(f'epoch: {epoch}')
+      print(f'{"[epoch " + str(epoch)+"]":-^100}')
       self.train_one_epoch()
       self.eval()
+      print('-' * 100, end='\n\n')
 
   @statistics
   def train_one_epoch(self):
@@ -63,7 +63,7 @@ class ResNet50:
       print(f'val: {torch.sum(correct)/len(correct)*100:.2f}%, {loss:.4f}')
 
 if __name__ == '__main__':
-  opt = init.init()
+  opt = args.init()
   device = 'cuda' if torch.cuda.is_available() else 'cpu'
   model = ResNet50(dataloader.load_data('mnist', batch_size=opt.batch_size, num_workers=opt.n_workers), device)
   print(device)
