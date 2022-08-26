@@ -30,7 +30,6 @@ class ResNet50:
       image = image.to(self.device).float()
       label = label.to(self.device)
       
-      print(image.shape, label.shape)
       pred = self.model(image)
       loss = self.loss_fn(pred, label)
       loss.backward()
