@@ -14,8 +14,8 @@ for batch_size in [(2)**x for x in range(int(log(opt.min_batch_size,2)), int(log
   print(batch_size)
   dataloader = load_data('mnist', batch_size=batch_size, num_workers=opt.n_workers)
   model = ResNet50(dataloader, device, opt.n_gpu, verbose=False)
-  train_tps, _ = model.train(epochs=opt.epochs)
-  output.append( (batch_size, train_tps) )
+  tps_res = model.train(epochs=opt.epochs)
+  output.append( (batch_size, tps_res['train']) )
 
 for batch_size, tps in output:
   print(f'{batch_size}:\t {tps}')
