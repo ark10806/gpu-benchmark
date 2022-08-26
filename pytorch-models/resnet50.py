@@ -36,6 +36,7 @@ class ResNet50:
     pbar = tqdm(self.dataloader['train'], desc='train')
     for image, label in pbar:
       self.tps.append(len(label))
+      self.optim.zero_grad()
       image = image.to(self.device).float()
       label = label.to(self.device)
       
