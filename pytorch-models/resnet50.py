@@ -2,6 +2,7 @@ import timm
 import torch
 from tqdm import tqdm
 import torch.nn as nn
+from torch.optim import Adam
 
 import init
 import dataloader
@@ -13,6 +14,7 @@ class ResNet50:
     self.device = device
     self.loss_fn = nn.CrossEntropyLoss()
     self.init_model()
+    self.optim = Adam(self.model.parameters(), lr=1e-4)
 
   def statistics(func):
     def wrapper(self):
@@ -40,6 +42,7 @@ class ResNet50:
       pred = self.model(image)
       loss = self.loss_fn(pred, label)
       loss.mean().backward()
+      self.optim.step()
       pbar.set_postfix({'tps': self.tps.eval()})
 
 
