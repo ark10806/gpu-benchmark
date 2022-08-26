@@ -9,7 +9,8 @@ class TPS:
     self.iter += n
   
   def eval(self):
-    return f'{self.iter / (time() - self.time):.2f}'
+    # return f'{self.iter / (time() - self.time):.2f}'
+    return self.iter / (time() - self.time)
 
 def avg(arr: list):
   return sum(arr) / len(arr)

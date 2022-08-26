@@ -51,7 +51,7 @@ class ResNet50:
       loss = self.loss_fn(pred, label)
       loss.mean().backward()
       self.optim.step()
-      pbar.set_postfix({'tps': self.tps.eval()})
+      pbar.set_postfix({'tps': f'{self.tps.eval():.2f}'})
 
 
   @statistics
@@ -66,7 +66,7 @@ class ResNet50:
         pred = self.model(image)
         loss = self.loss_fn(pred, label)
         correct = torch.argmax(pred, 1) == label
-        pbar.set_postfix({'tps': self.tps.eval()})
+        pbar.set_postfix({'tps': f'{self.tps.eval():.2f}'})
       if self.v: print(f'> acc: {torch.sum(correct)/len(correct)*100:.2f}%\t loss: {loss:.4f}')
 
 if __name__ == '__main__':
