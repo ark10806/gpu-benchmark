@@ -8,10 +8,10 @@ import init
 
 class ResNet50:
   def __init__(self, dataloader, device):
-    self.init_model()
     self.dataloader = dataloader
     self.device = device
     self.loss_fn = nn.CrossEntropyLoss()
+    self.init_model()
 
   def init_model(self):
     self.model = timm.create_model('resnet50', pretrained=True, in_chans=1, num_classes=10).to(self.device)
