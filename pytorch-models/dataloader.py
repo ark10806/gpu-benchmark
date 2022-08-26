@@ -1,43 +1,19 @@
-import os
-from torchvision.datasets import MNIST, ImageNet
-from torchvision.transforms import transforms
+import torch
+from dataset import Dataset
 
-class Dataset:
-  def __init__(self):
-    self.data_root = './datasets/'
+def load_data(dataset, batch_size, num_workers):
+  dataset = Dataset().load(dataset)
+  splits = ['train', 'valid']
+  shuffle = {'train': True, 'valid': False}
 
-    self.candidates = {
-      'mnist': self._load_mnist,
-      'cifar10': self._load_cifar10,
-      'imagenet': self._load_imagenet
-    }
-  
-  def load(self, dataset: str):
-    assert dataset in self.candidates, f"Available datasets are [{' '.join(self.candidates.keys())}]"
-    return self.candidates[dataset]()
-
-  def _load_mnist(self):
-    path = os.path.join(self.data_root, 'mnist')
-    transform = transforms.Compose([
-      transforms.ToTensor(),
-      transforms.Normalize((0.5), (1.0))
-    ])
-    train = MNIST(path, transform=transform, train=True, download=True)
-    valid = MNIST(path, transform=transform, train=False, download=True)
-    # test = MNIST(path, transform=transform, train=False, download=True)
-    # return train, valid, test
-    return train, valid
-
-  def _load_cifar10(self):
-    print('cifar')
-
-  def _load_imagenet(self):
-    path = os.path.join(self.data_root, 'imagenet')
-    os.mkdir(path)
-    train = ImageNet(path, 'train')
-    valid = ImageNet(path, 'val')
-    return train, valid
-
-
-if __name__ == '__main__':
-  print(Dataset().load('imagenet'))
+  dataloader = {
+    x: torch.utils.data.DataLoader(
+      dataset = dataset[x],
+      batch_size = batch_size,
+      shuffle = shuffle[x],
+      num_workers = num_workers,
+      drop_last = shuffle[x],
+    )
+    for x in splits
+  }
+  return dataloader
