@@ -19,7 +19,7 @@ class ResNet50:
   def train(self, epochs):
     for epoch in range(epochs):
       print(f'epoch: {epoch}')
-      # self.train_one_epoch()
+      self.train_one_epoch()
       self.eval()
 
   def train_one_epoch(self):
