@@ -48,6 +48,7 @@ class ResNet50:
     with torch.no_grad():
       pbar = tqdm(self.dataloader['valid'], desc='eval')
       for image, label in pbar:
+        self.tps.append(len(label))
         image = image.to(self.device)
         label = label.to(self.device)
 
