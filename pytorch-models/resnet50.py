@@ -1,10 +1,11 @@
-import sys
 import timm
 import torch
 from tqdm import tqdm
 import torch.nn as nn
-import dataloader
+
 import init
+import dataloader
+from helper import TPS
 
 class ResNet50:
   def __init__(self, dataloader, device):
@@ -12,6 +13,12 @@ class ResNet50:
     self.device = device
     self.loss_fn = nn.CrossEntropyLoss()
     self.init_model()
+
+  def statistics(func):
+    def wrapper(self):
+      self.tps = TPS()
+      func( self )
+    return wrapper
 
   def init_model(self):
     self.model = timm.create_model('resnet50', pretrained=True, in_chans=1, num_classes=10).to(self.device)
@@ -22,24 +29,32 @@ class ResNet50:
       self.train_one_epoch()
       self.eval()
 
+  @statistics
   def train_one_epoch(self):
-    for image, label in tqdm(self.dataloader['train'], desc='train'):
+    pbar = tqdm(self.dataloader['train'], desc='train')
+    for image, label in pbar:
+      self.tps.append(len(label))
       image = image.to(self.device).float()
       label = label.to(self.device)
       
       pred = self.model(image)
       loss = self.loss_fn(pred, label)
-      loss.backward()
+      loss.mean().backward()
+      pbar.set_postfix({'tps': self.tps.eval()})
 
+
+  @statistics
   def eval(self):
     with torch.no_grad():
-      for image, label in tqdm(self.dataloader['valid'], desc='eval'):
+      pbar = tqdm(self.dataloader['valid'], desc='eval')
+      for image, label in pbar:
         image = image.to(self.device)
         label = label.to(self.device)
 
         pred = self.model(image)
         loss = self.loss_fn(pred, label)
         correct = torch.argmax(pred, 1) == label
+        pbar.set_postfix({'tps': self.tps.eval()})
       print(f'val: {torch.sum(correct)/len(correct)*100:.2f}%, {loss:.4f}')
 
 if __name__ == '__main__':
