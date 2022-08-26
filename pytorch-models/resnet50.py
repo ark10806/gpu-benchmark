@@ -46,5 +46,7 @@ class ResNet50:
         print(f'val: {correct}, {loss}')
 
 if __name__ == '__main__':
+  device = 'cuda' if torch.cuda.is_available() else 'cpu'
   model = ResNet50(dataloader.load_data('mnist', 16, 4), 'cpu')
+  print(device)
   model.train(epochs=10)
