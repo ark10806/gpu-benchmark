@@ -60,7 +60,7 @@ class ResNet50:
         loss = self.loss_fn(pred, label)
         correct = torch.argmax(pred, 1) == label
         pbar.set_postfix({'tps': self.tps.eval()})
-      print(f'acc: {torch.sum(correct)/len(correct)*100:.2f}%\t loss: {loss:.4f}')
+      print(f'> acc: {torch.sum(correct)/len(correct)*100:.2f}%\t loss: {loss:.4f}')
 
 if __name__ == '__main__':
   opt = args.init()
