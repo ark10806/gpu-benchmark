@@ -9,4 +9,4 @@ class TPS:
     self.iter += n
   
   def eval(self):
-    return str(self.iter / (time() - self.time))
+    return str(round(self.iter / (time() - self.time), 2))
