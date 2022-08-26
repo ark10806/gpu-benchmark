@@ -22,5 +22,6 @@ for batch_size in batch_list:
   tps_res = model.train(epochs=opt.epochs)
   output.append( (batch_size, tps_res['train']) )
 
+print(f'{batch_size:10}\t TPS')
 for batch_size, tps in output:
-  print(f'{batch_size}:\t {tps}')
+  print(f'{batch_size:10}:\t {tps}')
