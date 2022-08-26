@@ -14,7 +14,7 @@ class ResNet50:
     self.loss_fn = nn.CrossEntropyLoss()
 
   def init_model(self):
-    self.model = timm.create_model('resnet50', pretrained=True, in_chans=1, num_classes=10)
+    self.model = timm.create_model('resnet50', pretrained=True, in_chans=1, num_classes=10).to(self.device)
 
   def train(self, epochs):
     for epoch in range(epochs):
